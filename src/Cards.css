@@ -1,0 +1,43 @@
+#cardmain {    
+    display: block;
+    margin: 20px;
+    padding: 20px;
+    float: left;
+}
+#cardbutton {
+    display: flex;
+    float: right;
+}
+
+#carddiv {
+    display: flex;
+    padding-bottom: 15px;
+}
+
+#checkbox{
+    padding: 0;
+    color: secondary;
+}
+
+
+#carddivspan {
+    overflow-wrap: break-word;
+    display: inline-block;
+    max-width: 200px;
+    padding: 12px 5px 0 0;
+}
+
+#carddivinput {
+    display: inline-block;
+    margin: 20px;
+    padding: 0;    
+}
+
+#carddivinputinp{    
+    margin: 0 15px 0 0;
+}
+
+.material-icons {
+    padding-right: 7px;
+    outline: 10px;
+}
