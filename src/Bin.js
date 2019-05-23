@@ -27,7 +27,7 @@ export default function Bin () {
                     <Fragment>
                         <div id="carddivinput">                
                             <Button onClick={context.handleClickClear()}>
-                                Отчистить корзину
+                                Очистить корзину
                             </Button>
                         </div>
                         <div>
