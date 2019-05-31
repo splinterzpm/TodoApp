@@ -4,10 +4,9 @@ import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import { Checkbox } from '@material-ui/core';
 import './Cards.css'
-import { GlobalContext } from './index';
+import { GlobalContext } from '.';
 import { withStyles } from '@material-ui/core/styles';
 
-var list = JSON.parse(localStorage.getItem('list'));
 
 const checkBoxStyles = theme => ({
     root: {
@@ -25,32 +24,66 @@ export default function Cards() {
         <GlobalContext.Consumer>
             {( context ) => (
                 <Fragment>
-                    <div id="carddivinput">
-                        <input id="carddivinputinp" value={context.state.value} onChange={context.handleChange()} />                        
+                    <div>
+                        <div id="carddivinput">
+                            <p> Название карточки </p>      
+                            <input id="carddivinputinp" value={context.state.value} 
+                            onChange={context.handleChange()} />
+                            <p> Содержимое карточки </p>  
+                            <input id="carddivinputinp" value={context.state.value2} 
+                            onChange={context.handleChangeV2()} />
+                        </div>
                         <Button onClick={context.handleClickAdd()}>
                             Добавить
                         </Button>
                         <Button onClick={context.handleClickSort()}>
                             Сортировать карточки по алфавиту
                         </Button>
+
                     </div>              
                     <div>
-                        {context && context.state.list.map((value, i) => {
-                            return (
+                        {context.state.list.map((card, i) => (
                                 <Card id="cardmain" key={i}>
                                     <div id="carddiv">
-                                        <div>
-                                            <CustomCheckbox /> 
-                                        </div>                            
-                                        <span id="carddivspan"> {value} </span>
+                                        <label>
+                                            {/* {console.log(card.checked)} */}
+                                            {console.log(card.checked)}
+                                        <CustomCheckbox defaultChecked={context.state.list[i].checked} onClick={context.handleCheck(i)} /> 
+                                        </label>
+                                        <span id="carddivspan"> {card.name} </span>                                            
                                     </div>
+                                    <span id="carddivspan"> {card.content} </span>
+                                    <Button id="cardbutton" onClick={() => context.handleClickEdit(i)}>
+                                        <Icon>edit</Icon>
+                                        Редактировать                                
+                                    </Button>
                                     <Button id="cardbutton" onClick={() => context.handleClickDel(i)}>
                                         <Icon>delete</Icon>
                                         Удалить                                
-                                    </Button>                                        
+                                    </Button>                              
+                                </Card>
+                              )
+                            )
+                        }
+                        {/* {context && context.state.list.map((value, i) => {
+                            return (
+                                <Card id="cardmain" key={i}>
+                                    <div id="carddiv">
+                                        <CustomCheckbox />                           
+                                        <span id="carddivspan"> {value} </span>
+                                        <span id="carddivspan"> {context.state.textlist[i]} </span>
+                                    </div>
+                                    <Button onClick={() => context.handleClickEdit(i)}>
+                                        <Icon>edit</Icon>
+                                        Редактировать                                
+                                    </Button>
+                                    <Button id="cardbutton" onClick={() => context.handleClickDel(i)}>
+                                        <Icon>delete</Icon>
+                                        Удалить                                
+                                    </Button>                              
                                 </Card>                                       
                             );
-                        })} 
+                        })}  */}
                     </div>
                 </Fragment>
             )}

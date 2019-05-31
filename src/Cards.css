@@ -2,7 +2,7 @@
     display: block;
     margin: 20px;
     padding: 20px;
-    float: left;
+    /* float: left; */
 }
 #cardbutton {
     display: flex;
@@ -22,7 +22,7 @@
 
 #carddivspan {
     overflow-wrap: break-word;
-    display: inline-block;
+    display: block;
     max-width: 200px;
     padding: 12px 5px 0 0;
 }
@@ -34,7 +34,8 @@
 }
 
 #carddivinputinp{    
-    margin: 0 15px 0 0;
+    margin: 0 15px 15px 0;
+    display: block;
 }
 
 .material-icons {
