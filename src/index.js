@@ -12,12 +12,13 @@ export const GlobalContext = React.createContext();
 class App extends Component {
   state = {
     list: [
-      { name: 'Дело 1', content: 'Содержимое 1', checked: false },
-      { name: 'Дело 2', content: 'Содержимое 2', checked: false }, 
-      { name: 'Дело 3', content: 'Содержимое 3', checked: false }
+      { name: 'Дело 1', content: 'Содержимое 1', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]},
+      { name: 'Дело 2', content: 'Содержимое 2', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]}, 
+      { name: 'Дело 3', content: 'Содержимое 3', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]}
     ],
     value: '',
     value2: '',
+    tagvalue:'',
     binlist: [],
     isEdit: false,
     isConfirmed: false,
@@ -61,7 +62,7 @@ class App extends Component {
   }
 
   handleChange = ({ target: { value }}) => {
-    this.setState({ value });
+    this.setState({ value: value });
   }
 
   handleChangeV2 = ({ target: { value }}) => {
@@ -70,7 +71,7 @@ class App extends Component {
 
   handleClickAdd = () => {
     const newlist = this.state.list;
-    newlist.push({ name: this.state.value, content: this.state.value2, checked: false });
+    newlist.push({ name: this.state.value, content: this.state.value2, checked: false, tags:[] });
     this.setState({ list: newlist, value: '', value2: '' });
   }
 
@@ -102,7 +103,7 @@ class App extends Component {
   }
 
   CleanBinTimer = () => {
-    setInterval(this.handleClickClear, 20000);
+    setInterval(this.handleClickClear, 3000);
   }
 
   handleClickEdit = (i) => {
@@ -113,19 +114,36 @@ class App extends Component {
   }
 
   handleChangeOnCard = ({ target: { value }}) => {
-    this.setState({ value });
+    this.setState({ editedValue: value });
   }
 
   handleClickConfirm = (i) => {
     const newList = this.state.list;
-    newList.splice(i, 0, this.state.editedValue);
-    this.setState({ list: newList, isEdit: false, isConfirmed: true });
+    newList.splice(i, 1, { name: this.state.editedValue, content: '', checked: false })
+    this.setState({ list: newList, isEdit: false, isConfirmed: true, editedCard: '', editedValue: ''  });
   }
 
   handleCheck = (i) => {
     const newlist = this.state.list;
-    newlist[i].checked = !newlist[i].checked;
-    this.saveStateToLocalStorage();
+    newlist[i] = !newlist[i];
+    console.log(newlist[i]);
+  }
+
+  handleInputChange = ({ target: { value }}) => {
+    this.setState({ tagvalue: value });
+  }
+
+  handleAddition = (i) => {
+    var stateCopy = Object.assign({}, this.state);
+    stateCopy.list = stateCopy.list.slice();
+    stateCopy.list[i] = Object.assign({}, stateCopy.list[i]);
+    stateCopy.list[i].tags.push({id: this.state.tagvalue, text: this.state.tagvalue});
+    this.setState(stateCopy);
+  }
+  
+  handleDelete = (i) => {
+    const newtags = this.state.list;
+    newtags[i].tags.splice(i, 1);
   }
 
   render () {
@@ -143,9 +161,13 @@ class App extends Component {
         handleChangeOnCard: () => this.handleChangeOnCard,
         handleClickConfirm: (i) => this.handleClickConfirm(i),
         handleCheck: (i) => this.handleCheck(i),
+        handleAddition: (i) => this.handleAddition,
+        handleDelete: () => this.handleDelete,
+        handleInputChange: () => this.handleInputChange,
         CleanBinTimer: () => this.CleanBinTimer,
         componentDidMount: () => this.componentDidMount,
         hydrateStateWithLocalStorage: () => this.hydrateStateWithLocalStorage,
+        
         }}>
         <Router>
           <div>
@@ -168,9 +190,6 @@ class App extends Component {
             </Switch>
           </div>
           </Router>
-          {/* <div> 
-          {(this.state.isEdit === true && this.state.isConfirmed === false) ? <div> <EditCard /> <Cards /> </div> : a}
-          </div> */}
       </GlobalContext.Provider>
     );
   }

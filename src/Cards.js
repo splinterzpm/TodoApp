@@ -6,7 +6,7 @@ import { Checkbox } from '@material-ui/core';
 import './Cards.css'
 import { GlobalContext } from '.';
 import { withStyles } from '@material-ui/core/styles';
-
+import { WithContext as ReactTags } from 'react-tag-input';
 
 const checkBoxStyles = theme => ({
     root: {
@@ -42,13 +42,12 @@ export default function Cards() {
 
                     </div>              
                     <div>
-                        {context.state.list.map((card, i) => (
+                        {context && context.state.list.map((card, i) => (
                                 <Card id="cardmain" key={i}>
                                     <div id="carddiv">
                                         <label>
-                                            {/* {console.log(card.checked)} */}
-                                            {console.log(card.checked)}
-                                        <CustomCheckbox defaultChecked={context.state.list[i].checked} onClick={context.handleCheck(i)} /> 
+                                            {console.log(card.tags)}
+                                        <CustomCheckbox defaultChecked={context.state.list[i].checked}  /> 
                                         </label>
                                         <span id="carddivspan"> {card.name} </span>                                            
                                     </div>
@@ -60,7 +59,13 @@ export default function Cards() {
                                     <Button id="cardbutton" onClick={() => context.handleClickDel(i)}>
                                         <Icon>delete</Icon>
                                         Удалить                                
-                                    </Button>                              
+                                    </Button>
+                                    <ReactTags tags={card.tags}
+                                    handleInputChange={context.handleInputChange}
+                                    autofocus={false} 
+                                    handleAddition={context.handleAddition(i)}
+                                    handleDelete={context.handleDelete(i)}
+                                    />                            
                                 </Card>
                               )
                             )

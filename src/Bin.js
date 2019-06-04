@@ -32,18 +32,17 @@ export default function Bin () {
                     <div>
                         {context.state.binlist.map((card, i) => (
                                 <Card id="cardmain" key={i}>
-                                        <div id="carddiv">
-                                            <CustomCheckbox checked={card.checked} onClick={context.handleCheck(card.checked)} />
-                                            <span id="carddivspan"> {card.name} </span>
-                                        </div>
-                                        <span id="carddivspan"> {card.content} </span>
+                                    <div id="carddiv">
+                                        <CustomCheckbox defaultChecked={card.checked} onClick={context.handleCheck(card.checked)} />
+                                        <span id="carddivspan"> {card.name} </span>
+                                    </div>
+                                    <span id="carddivspan"> {card.content} </span>
                                     <Button id="cardbutton" onClick={() => context.handleClickReset(i)}>
                                         <Icon>restore</Icon>
                                         Восстановить                                
                                     </Button>                                                            
-                                </Card>                                       
-                            
-                            ))
+                                </Card>
+                        ))
                         }
                     </div>
                 </Fragment>

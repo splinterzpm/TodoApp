@@ -28,7 +28,7 @@ export default function EditCard () {
                             <Card id="cardmain" key={context.state.editedCard}>
                                 <div id="carddiv">
                                     <CustomCheckbox />
-                                    <input id="carddivinputinp" autoFocus value={context.state.editedValue}
+                                    <input id="carddivinputinp" autoFocus={true} value={context.state.editedValue}
                                     onChange={context.handleChangeOnCard()} />
                                 </div>
                                 <Button onClick={() => context.handleClickConfirm(context.state.editedCard)}>
