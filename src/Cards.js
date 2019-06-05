@@ -60,7 +60,12 @@ export default function Cards() {
                                         <Icon>delete</Icon>
                                         Удалить                                
                                     </Button>
-                                    <ReactTags tags={card.tags}
+                                    <ReactTags tags={card.tags.map((tag, j) => (
+                                        <li key={tag + j}>
+                                        {tag}
+                                        </li>
+                                    ))}
+                                    id={context.state.tagvalue}
                                     handleInputChange={context.handleInputChange}
                                     autofocus={false} 
                                     handleAddition={context.handleAddition(i)}

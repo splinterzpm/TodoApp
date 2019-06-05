@@ -23,7 +23,8 @@ class App extends Component {
     isEdit: false,
     isConfirmed: false,
     editedCard: '',
-    editedValue: '',
+    editedCardName: '',
+    editedCardContent: '',
     input: React.createRef(),
   }
   
@@ -64,7 +65,7 @@ class App extends Component {
   handleChange = ({ target: { value }}) => {
     this.setState({ value: value });
   }
-
+  
   handleChangeV2 = ({ target: { value }}) => {
     this.setState({ value2: value });
   }
@@ -99,7 +100,11 @@ class App extends Component {
 
   handleClickClear = () => {
     const newBin = [];
-    this.setState({ binlist: newBin });
+    this.setState({ list: [
+      { name: 'Дело 1', content: 'Содержимое 1', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]},
+      { name: 'Дело 2', content: 'Содержимое 2', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]}, 
+      { name: 'Дело 3', content: 'Содержимое 3', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]}
+    ],binlist: newBin });
   }
 
   CleanBinTimer = () => {
@@ -107,20 +112,26 @@ class App extends Component {
   }
 
   handleClickEdit = (i) => {
-    this.setState({ editedCard: i, editedValue: this.state.list[i], isEdit: true, isConfirmed: false });
+    this.setState({ editedCard: i, editedCardName: this.state.list[i].name, editedCardContent: this.state.list[i].content, isEdit: true, isConfirmed: false });
     const newList = this.state.list;
-    newList.splice(i, 1);
+    delete newList[i].name;
+    delete newList[i].content;
     this.setState({ list: newList });
   }
 
-  handleChangeOnCard = ({ target: { value }}) => {
-    this.setState({ editedValue: value });
+  handleChangeCardName = ({ target: { value }}) => {
+    this.setState({ editedCardName: value });
+  }
+
+  handleChangeCardContent = ({ target: { value }}) => {
+    this.setState({ editedCardContent: value });
   }
 
   handleClickConfirm = (i) => {
     const newList = this.state.list;
-    newList.splice(i, 1, { name: this.state.editedValue, content: '', checked: false })
-    this.setState({ list: newList, isEdit: false, isConfirmed: true, editedCard: '', editedValue: ''  });
+    newList[i].name = this.state.editedCardName;
+    newList[i].content = this.state.editedCardContent;
+    this.setState({ list: newList, isEdit: false, isConfirmed: true, editedCard: '', editedCardName: '', editedCardContent: ''  });
   }
 
   handleCheck = (i) => {
@@ -137,7 +148,8 @@ class App extends Component {
     var stateCopy = Object.assign({}, this.state);
     stateCopy.list = stateCopy.list.slice();
     stateCopy.list[i] = Object.assign({}, stateCopy.list[i]);
-    stateCopy.list[i].tags.push({id: this.state.tagvalue, text: this.state.tagvalue});
+    stateCopy.list[i].tags = stateCopy.list[i].tags.slice();
+    stateCopy.list[i].tags = [...stateCopy.list[i].tags, { id: this.state.tagvalue, text: this.state.tagvalue }]
     this.setState(stateCopy);
   }
   
@@ -158,7 +170,8 @@ class App extends Component {
         handleClickReset: (i) => this.handleClickReset(i),
         handleClickClear: () => this.handleClickClear,
         handleClickEdit: (i) => this.handleClickEdit(i),
-        handleChangeOnCard: () => this.handleChangeOnCard,
+        handleChangeCardName: () => this.handleChangeCardName,
+        handleChangeCardContent: () => this.handleChangeCardContent,
         handleClickConfirm: (i) => this.handleClickConfirm(i),
         handleCheck: (i) => this.handleCheck(i),
         handleAddition: (i) => this.handleAddition,
