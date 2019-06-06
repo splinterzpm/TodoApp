@@ -25,7 +25,7 @@ export default function EditCard () {
                 {( context ) => (
                     <Fragment>         
                         <div>
-                            <Card id="cardmain" key={context.state.editedCard}>
+                            <Card id="editedcard" key={context.state.editedCard}>
                                 <div id="carddiv">
                                     <CustomCheckbox />
                                     <input id="carddivinputinp" autoFocus={true} value={context.state.editedCardName}

@@ -33,7 +33,7 @@ export default function Bin () {
                         {context.state.binlist.map((card, i) => (
                                 <Card id="cardmain" key={i}>
                                     <div id="carddiv">
-                                        <CustomCheckbox defaultChecked={card.checked} onClick={context.handleCheck(card.checked)} />
+                                        <CustomCheckbox defaultChecked={card.checked}  />
                                         <span id="carddivspan"> {card.name} </span>
                                     </div>
                                     <span id="carddivspan"> {card.content} </span>

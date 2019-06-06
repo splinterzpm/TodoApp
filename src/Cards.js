@@ -46,8 +46,9 @@ export default function Cards() {
                                 <Card id="cardmain" key={i}>
                                     <div id="carddiv">
                                         <label>
-                                            {console.log(card.tags)}
-                                        <CustomCheckbox defaultChecked={context.state.list[i].checked}  /> 
+                                            {console.log(card.checked)}
+                                        <CustomCheckbox defaultChecked={context.state.list[i].checked}
+                                        />
                                         </label>
                                         <span id="carddivspan"> {card.name} </span>                                            
                                     </div>
@@ -60,12 +61,7 @@ export default function Cards() {
                                         <Icon>delete</Icon>
                                         Удалить                                
                                     </Button>
-                                    <ReactTags tags={card.tags.map((tag, j) => (
-                                        <li key={tag + j}>
-                                        {tag}
-                                        </li>
-                                    ))}
-                                    id={context.state.tagvalue}
+                                    <ReactTags tags={card.tags}
                                     handleInputChange={context.handleInputChange}
                                     autofocus={false} 
                                     handleAddition={context.handleAddition(i)}

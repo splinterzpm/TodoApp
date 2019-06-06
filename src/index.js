@@ -12,9 +12,9 @@ export const GlobalContext = React.createContext();
 class App extends Component {
   state = {
     list: [
-      { name: 'Дело 1', content: 'Содержимое 1', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]},
-      { name: 'Дело 2', content: 'Содержимое 2', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]}, 
-      { name: 'Дело 3', content: 'Содержимое 3', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]}
+      { name: 'Дело 1', content: 'Содержимое 1', checked: true, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]},
+      { name: 'Дело 2', content: 'Содержимое 2', checked: true, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]}, 
+      { name: 'Дело 3', content: 'Содержимое 3', checked: true, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]}
     ],
     value: '',
     value2: '',
@@ -29,19 +29,14 @@ class App extends Component {
   }
   
   hydrateStateWithLocalStorage() {
-    // for all items in state
-    for (let key in this.state) {
-      // if the key exists in localStorage
-      if (localStorage.hasOwnProperty(key)) {
-        // get the key's value from localStorage
-        let value = localStorage.getItem(key);
 
-        // parse the localStorage string and setState
+    for (let key in this.state) {
+      if (localStorage.hasOwnProperty(key)) {
+        let value = localStorage.getItem(key);
         try {
           value = JSON.parse(value);
           this.setState({ [key]: value });
         } catch (e) {
-          // handle empty string
           this.setState({ [key]: value });
         }
       }
@@ -56,10 +51,8 @@ class App extends Component {
 
   componentDidMount () {
     this.hydrateStateWithLocalStorage();
-    window.addEventListener(
-      "beforeunload",
-      this.saveStateToLocalStorage.bind(this)
-    );
+    window.addEventListener("beforeunload", this.saveStateToLocalStorage.bind(this));
+    window.addEventListener("load", this.CleanBinTimer.bind(this));
   }
 
   handleChange = ({ target: { value }}) => {
@@ -71,44 +64,40 @@ class App extends Component {
   }
 
   handleClickAdd = () => {
-    const newlist = this.state.list;
-    newlist.push({ name: this.state.value, content: this.state.value2, checked: false, tags:[] });
-    this.setState({ list: newlist, value: '', value2: '' });
+    const newList = this.state.list;
+    newList.push({ name: this.state.value, content: this.state.value2, checked: false, tags:[] });
+    this.setState({ list: newList, value: '', value2: '' });
   }
 
   handleClickDel = (i) => {
-    const newbinlist = this.state.binlist;
-    const newlist = this.state.list;
-    newbinlist.push(newlist[i]);
-    newlist.splice(i, 1);
-    this.setState({ list: newlist, binlist: newbinlist});
+    const newBinList = this.state.binlist;
+    const newList = this.state.list;
+    newBinList.push(newList[i]);
+    newList.splice(i, 1);
+    this.setState({ list: newList, binlist: newBinList});
   }
 
   handleClickSort = () => {
-    const newlist = this.state.list;
-    newlist.sort((a, b) => (a.name > b.name) ? 1 : -1);
-    this.setState({ list: newlist});
+    const newList = this.state.list;
+    newList.sort((a, b) => (a.name > b.name) ? 1 : -1);
+    this.setState({ list: newList});
   }
 
   handleClickReset = (i) => {
-    const newbinlist = this.state.binlist;
-    const newlist = this.state.list;
-    newlist.push(newbinlist[i]);
-    newbinlist.splice(i, 1);
-    this.setState({ list: newlist, binlist: newbinlist});
+    const newBinList = this.state.binlist;
+    const newList = this.state.list;
+    newList.push(newBinList[i]);
+    newBinList.splice(i, 1);
+    this.setState({ list: newList, binlist: newBinList});
   }
 
   handleClickClear = () => {
     const newBin = [];
-    this.setState({ list: [
-      { name: 'Дело 1', content: 'Содержимое 1', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]},
-      { name: 'Дело 2', content: 'Содержимое 2', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]}, 
-      { name: 'Дело 3', content: 'Содержимое 3', checked: false, tags: [{ id: 'Расписание', text: 'Расписание'}, { id: 'Дела', text: 'Дела'}]}
-    ],binlist: newBin });
+    this.setState({ binlist: newBin });
   }
 
   CleanBinTimer = () => {
-    setInterval(this.handleClickClear, 3000);
+    setInterval(this.handleClickClear, 60000);
   }
 
   handleClickEdit = (i) => {
@@ -135,22 +124,16 @@ class App extends Component {
   }
 
   handleCheck = (i) => {
-    const newlist = this.state.list;
-    newlist[i] = !newlist[i];
-    console.log(newlist[i]);
+    const newList = this.state.list;
+    newList[i].checked = !newList[i].checked;
   }
 
   handleInputChange = ({ target: { value }}) => {
     this.setState({ tagvalue: value });
   }
 
-  handleAddition = (i) => {
-    var stateCopy = Object.assign({}, this.state);
-    stateCopy.list = stateCopy.list.slice();
-    stateCopy.list[i] = Object.assign({}, stateCopy.list[i]);
-    stateCopy.list[i].tags = stateCopy.list[i].tags.slice();
-    stateCopy.list[i].tags = [...stateCopy.list[i].tags, { id: this.state.tagvalue, text: this.state.tagvalue }]
-    this.setState(stateCopy);
+  handleAddition = (tag) => {
+    this.setState(state => ({ tags: [...state.tags, tag] }));
   }
   
   handleDelete = (i) => {
@@ -195,7 +178,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/" render={() => (
                 <div>
-                  {(this.state.isEdit === true && this.state.isConfirmed === false) ? <div> <Cards /> <EditCard /> </div> : <Cards />}
+                  {(this.state.isEdit === true && this.state.isConfirmed === false) ? <div> <EditCard /> <Cards />  </div> : <Cards />}
                 </div>
               )} />
               <Route path="/Bin" component={Bin} />
